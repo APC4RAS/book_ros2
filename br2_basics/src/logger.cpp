@@ -14,7 +14,11 @@
 
 #include "rclcpp/rclcpp.hpp"
 
+// note use of chrono literals
 using namespace std::chrono_literals;
+
+// Controller rate, 1Hz by default
+const auto controller_rate = 1000ms;
 
 int main(int argc, char * argv[])
 {
@@ -22,12 +26,16 @@ int main(int argc, char * argv[])
 
   auto node = rclcpp::Node::make_shared("logger_node");
 
-  rclcpp::Rate loop_rate(500ms);
+  rclcpp::Rate loop_rate(controller_rate);
+
   int counter = 0;
   while (rclcpp::ok()) {
+    // ROS2 logging macro
     RCLCPP_INFO(node->get_logger(), "Hello %d", counter++);
 
+    // `spin_some` returns as soon as there are no more messages left to process
     rclcpp::spin_some(node);
+    // Process waits for given amount of time
     loop_rate.sleep();
   }
 

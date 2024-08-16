@@ -19,12 +19,16 @@ using namespace std::chrono_literals;
 class LoggerNode : public rclcpp::Node
 {
 public:
+  static constexpr auto rate = 500ms;
+
   LoggerNode()
   : Node("logger_node")
   {
     counter_ = 0;
+    // creates event tied to the system wall time clock that occurs with a frequence of 2 Hz
+    // whenever the event occurs, the method `timer_callback` is implemented
     timer_ = create_wall_timer(
-      500ms, std::bind(&LoggerNode::timer_callback, this));
+      rate, std::bind(&LoggerNode::timer_callback, this));
   }
 
   void timer_callback()
