@@ -23,16 +23,19 @@ public:
   LocalizationNode()
   : Node("localization_node")
   {
+    // Node behavioral parameters, declaration
     declare_parameter("number_particles", 200);
     declare_parameter("topics", std::vector<std::string>());
     declare_parameter("topic_types", std::vector<std::string>());
 
+    // Reading parameter definition
     get_parameter("number_particles", num_particles_);
     RCLCPP_INFO_STREAM(get_logger(), "Number of particles: " << num_particles_);
 
     get_parameter("topics", topics_);
     get_parameter("topic_types", topic_types_);
 
+    // Error checking
     if (topics_.size() != topic_types_.size()) {
       RCLCPP_ERROR(
         get_logger(), "Number of topics (%zu) != number of types (%zu)",

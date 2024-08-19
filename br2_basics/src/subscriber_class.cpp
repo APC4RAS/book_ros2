@@ -21,10 +21,11 @@ class SubscriberNode : public rclcpp::Node
 {
 public:
   SubscriberNode()
-  : Node("subscriber_node")
+  : Node("supervisor")
   {
+    // We subscribe this node to the
     subscriber_ = create_subscription<std_msgs::msg::Int32>(
-      "int_topic", 10,
+      "robot_01_heartbeat", 10,
       std::bind(&SubscriberNode::callback, this, _1));
   }
 

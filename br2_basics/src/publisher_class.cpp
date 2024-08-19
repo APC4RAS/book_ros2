@@ -24,16 +24,24 @@ class PublisherNode : public rclcpp::Node
 {
 public:
   PublisherNode()
-  : Node("publisher_node")
+  : Node("robot_01_hearbeat_pub")
   {
-    publisher_ = create_publisher<std_msgs::msg::Int32>("int_topic", 10);
+    /*
+		Instantiate publisher node, using the public interface of `rclcpp::Node`. The returned shared pointer is
+		stored in the `publisher_` member. Arguments to `create_publisher` are a string that encodes the name of the
+		topic and an instance of `rclcpp::QoS`. Note that instances of this class can be created directly from integer
+		values, in this case the value `10` sets the size of the output message queue.
+     */
+    publisher_ = create_publisher<std_msgs::msg::Int32>("robot_01_hearbeat", 10);
     timer_ = create_wall_timer(
       500ms, std::bind(&PublisherNode::timer_callback, this));
   }
 
   void timer_callback()
   {
+    // Every 500ms we increase the payload of the message object and send it for broadcast to any subscribers.
     message_.data += 1;
+    message_.data %= 120;
     publisher_->publish(message_);
   }
 
